@@ -34,8 +34,4 @@ public class SecurityConfig {
         return http.build();
     }
 }
-            .logout()
-                .logoutSuccessUrl("/login");
-    }
-}
 
