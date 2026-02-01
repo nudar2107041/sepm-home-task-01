@@ -1,3 +1,6 @@
+import jakarta.persistence.*;
+import java.util.List;
+
 @Entity
 public class Teacher {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
