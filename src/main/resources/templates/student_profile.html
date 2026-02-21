@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Student — Academia</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <style>
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:0 20px }
+    @media(max-width:540px){ .two-col { grid-template-columns:1fr } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a th:href="@{/}" class="brand">Academia</a>
+  <nav>
+    <a th:href="@{/view/students}">Students</a>
+    <a th:href="@{/view/courses}">Courses</a>
+    <a th:href="@{/view/departments}">Departments</a>
+  </nav>
+  <div class="nav-right">
+    <!-- Back to the students list -->
+    <a th:href="@{/view/students}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:14px">← Back to Students</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- Profile header -->
+  <div class="profile-header" style="margin-top:8px;margin-bottom:28px">
+    <div class="avatar" th:text="${#strings.substring(student.fullName, 0, 1)}">J</div>
+    <div>
+      <div class="page-title" style="margin-bottom:2px" th:text="${student.fullName}">Student Name</div>
+      <p style="color:var(--muted);font-size:14px" th:text="${student.username}">email</p>
+    </div>
+  </div>
+
+  <!-- Edit form -->
+  <!-- POST /teacher/student/update → TeacherWebController#updateStudent -->
+  <div class="card" style="max-width:680px">
+    <h2>Edit Profile</h2>
+    <form th:action="@{/teacher/student/update}" method="post">
+      <input type="hidden" name="id" th:value="${student.id}"/>
+
+      <div class="two-col">
+        <div>
+          <label>Full Name</label>
+          <input type="text" name="fullName" th:value="${student.fullName}" required/>
+        </div>
+        <div>
+          <label>Email Address</label>
+          <input type="text" name="username" th:value="${student.username}" required/>
+        </div>
+      </div>
+
+      <label>Department</label>
+      <select name="departmentId">
+        <option th:each="d : ${departments}"
+                th:value="${d.id}"
+                th:text="${d.name}"
+                th:selected="${student.department != null and student.department.id == d.id}"></option>
+      </select>
+
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+
+  <!-- Enrolled courses -->
+  <div class="card" style="max-width:680px">
+    <h2>Enrolled Courses</h2>
+    <ul class="pill-list">
+      <li th:each="c : ${student.courses}">
+        <span th:text="${c.name}"></span>
+        <!-- POST /teacher/student/{id}/removeCourse/{courseId} → TeacherWebController#removeCourseFromStudent -->
+        <form th:action="@{'/teacher/student/' + ${student.id} + '/removeCourse/' + ${c.id}}" method="post" style="display:inline">
+          <button type="submit" class="btn btn-danger" style="font-size:12px;padding:4px 10px;border-radius:6px">Remove</button>
+        </form>
+      </li>
+      <li th:if="${#lists.isEmpty(student.courses)}"
+          style="color:var(--muted);font-size:13px;background:none;border:none;padding:0">
+        No courses enrolled yet.
+      </li>
+    </ul>
+
+    <hr class="divider"/>
+    <h3>Add a Course</h3>
+    <!-- POST /teacher/student/{id}/addCourse → TeacherWebController#addCourseToStudent -->
+    <form th:action="@{'/teacher/student/' + ${student.id} + '/addCourse'}" method="post"
+          style="display:flex;gap:12px;align-items:flex-end">
+      <div style="flex:1">
+        <label>Select Course</label>
+        <select name="courseId" required style="margin-bottom:0">
+          <option value="" disabled selected>Choose a course…</option>
+          <option th:each="c : ${allCourses}" th:value="${c.id}" th:text="${c.name}"></option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-gold" style="flex-shrink:0;padding:12px 20px;margin-bottom:1px">Add</button>
+    </form>
+  </div>
+
+  <!-- Danger zone -->
+  <div class="card" style="max-width:680px;border:1px solid #fbd5d2">
+    <h2 style="color:#c0392b">Danger Zone</h2>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:18px">
+      Deleting this student is permanent and cannot be undone.
+    </p>
+    <!-- POST /teacher/student/delete/{id} → TeacherWebController#deleteStudent -->
+    <form th:action="@{'/teacher/student/delete/' + ${student.id}}" method="post" style="margin:0">
+      <button type="submit" class="btn btn-danger"
+              onclick="return confirm('Permanently delete this student?')">Delete Student</button>
+    </form>
+  </div>
+
+</div>
+</body>
+</html>

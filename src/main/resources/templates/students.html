@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Students — Academia</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+  <a th:href="@{/}" class="brand">Academia</a>
+  <nav>
+    <a th:href="@{/view/students}">Students</a>
+    <a th:href="@{/view/teachers}">Teachers</a>
+    <a th:href="@{/view/courses}">Courses</a>
+    <a th:href="@{/view/departments}">Departments</a>
+  </nav>
+  <div class="nav-right">
+    <a th:href="@{/dashboard}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:14px">Dashboard</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="action-bar">
+    <div class="page-title">Students <span class="badge">Directory</span></div>
+    <!-- GET /teacher/student/add → TeacherWebController#addStudentForm -->
+    <a th:href="@{/teacher/student/add}" class="btn btn-gold">＋ Add Student</a>
+  </div>
+
+  <div class="card" style="padding:0;overflow:hidden">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="s : ${students}">
+            <td><span class="chip" th:text="${s.id}"></span></td>
+            <td style="font-weight:600" th:text="${s.fullName}"></td>
+            <td style="color:var(--muted)" th:text="${s.username}"></td>
+            <td th:text="${s.department != null ? s.department.name : '—'}"></td>
+            <td>
+              <div class="flex gap-2 items-center">
+                <!-- GET /teacher/student/edit/{id} → TeacherWebController#editStudentForm -->
+                <a th:href="@{'/teacher/student/edit/' + ${s.id}}"
+                   class="btn btn-primary" style="font-size:13px;padding:7px 14px">Edit</a>
+                <!-- POST /teacher/student/delete/{id} → TeacherWebController#deleteStudent -->
+                <form th:action="@{'/teacher/student/delete/' + ${s.id}}" method="post" style="display:inline;margin:0">
+                  <button type="submit" class="btn btn-danger" style="font-size:13px;padding:7px 14px;margin:0"
+                          onclick="return confirm('Delete this student?')">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

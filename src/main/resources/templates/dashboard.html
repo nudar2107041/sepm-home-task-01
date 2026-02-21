@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — Academia</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+  <a th:href="@{/}" class="brand">Academia</a>
+  <nav>
+    <!-- GET /view/students → DashboardController#viewStudents -->
+    <a th:href="@{/view/students}">Students</a>
+    <!-- GET /view/teachers → DashboardController#viewTeachers -->
+    <a th:href="@{/view/teachers}">Teachers</a>
+    <!-- GET /view/courses → DashboardController#viewCourses -->
+    <a th:href="@{/view/courses}">Courses</a>
+    <!-- GET /view/departments → DashboardController#viewDepartments -->
+    <a th:href="@{/view/departments}">Departments</a>
+  </nav>
+  <div class="nav-right">
+    <!-- GET /teacher/profile → TeacherWebController#myProfile -->
+    <a th:href="@{/teacher/profile}" style="color:rgba(255,255,255,.8);text-decoration:none;font-size:14px">My Profile</a>
+    <!-- GET /logout → SecurityConfig logout -->
+    <a th:href="@{/logout}" class="btn btn-danger" style="font-size:13px;padding:7px 16px">Logout</a>
+  </div>
+</nav>
+
+<div class="container">
+  <header style="text-align:left;padding:36px 0 28px">
+    <h1 style="font-family:'Playfair Display',serif;font-size:32px;color:var(--navy)">Dashboard</h1>
+    <p style="color:var(--muted);margin-top:6px">Manage your institution from one place.</p>
+  </header>
+
+  <div style="margin-bottom:10px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Overview</div>
+  <div class="quick-links" style="margin-bottom:36px">
+    <a th:href="@{/view/students}" class="quick-link">
+      <div class="ql-icon">🎓</div>
+      <div class="ql-text"><strong>Students</strong><span>View all students</span></div>
+    </a>
+    <a th:href="@{/view/teachers}" class="quick-link">
+      <div class="ql-icon">👨‍🏫</div>
+      <div class="ql-text"><strong>Teachers</strong><span>Browse faculty</span></div>
+    </a>
+    <a th:href="@{/view/courses}" class="quick-link">
+      <div class="ql-icon">📚</div>
+      <div class="ql-text"><strong>Courses</strong><span>Course catalog</span></div>
+    </a>
+    <a th:href="@{/view/departments}" class="quick-link">
+      <div class="ql-icon">🏛️</div>
+      <div class="ql-text"><strong>Departments</strong><span>Academic units</span></div>
+    </a>
+  </div>
+
+  <div class="card">
+    <h2>Quick Actions</h2>
+    <div class="buttons" style="gap:12px">
+      <!-- GET /teacher/student/add → TeacherWebController#addStudentForm -->
+      <a th:href="@{/teacher/student/add}" class="btn btn-gold">＋ Add Student</a>
+      <!-- GET /teacher/course/add → TeacherWebController#addCourseForm -->
+      <a th:href="@{/teacher/course/add}" class="btn btn-primary">＋ Add Course</a>
+      <!-- GET /teacher/department/add → TeacherWebController#addDepartmentForm -->
+      <a th:href="@{/teacher/department/add}" class="btn btn-primary">＋ Add Department</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

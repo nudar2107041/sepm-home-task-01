@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login — Academia</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="auth-page">
+
+<div class="auth-card">
+    <div class="auth-brand">
+        <h1>Welcome Back</h1>
+        <p>Sign in to your Academia account</p>
+    </div>
+
+    <form th:action="@{/login}" method="post">
+        <label>Email Address</label>
+        <input type="text" name="username" placeholder="you@example.com" required/>
+
+        <label>Password</label>
+        <input type="password" name="password" placeholder="••••••••" required/>
+
+        <button type="submit">Sign In</button>
+    </form>
+
+    <div class="auth-link">
+        Don't have an account? <a th:href="@{/register}">Register here</a>
+    </div>
+</div>
+
+</body>
+</html>

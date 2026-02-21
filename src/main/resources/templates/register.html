@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Register — Academia</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .auth-card { max-width: 520px }
+        .two-col { display:grid; grid-template-columns:1fr 1fr; gap:0 18px }
+        @media(max-width:520px){ .two-col { grid-template-columns:1fr } }
+    </style>
+</head>
+<body class="auth-page">
+
+<div class="auth-card">
+    <div class="auth-brand">
+        <h1>Create Account</h1>
+        <p>Join Academia as a student or teacher</p>
+    </div>
+
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <form th:action="@{/register}" method="post">
+        <label>Full Name</label>
+        <input type="text" name="name" placeholder="Jane Doe" required/>
+
+        <label>Email Address</label>
+        <input type="email" name="email" placeholder="you@example.com" required/>
+
+        <div class="two-col">
+            <div>
+                <label>Password</label>
+                <input type="password" name="password" placeholder="••••••••" required/>
+            </div>
+            <div>
+                <label>Confirm Password</label>
+                <input type="password" name="confirmPassword" placeholder="••••••••" required/>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div>
+                <label>Role</label>
+                <select name="role">
+                    <option value="STUDENT">Student</option>
+                    <option value="TEACHER">Teacher</option>
+                </select>
+            </div>
+            <div>
+                <label>Department</label>
+                <select name="departmentId" required>
+                    <option value="" disabled selected>Select department</option>
+                    <option th:each="d : ${departments}" th:value="${d.id}" th:text="${d.name}"></option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit">Create Account</button>
+    </form>
+
+    <div class="auth-link">
+        Already have an account? <a th:href="@{/login}">Sign in</a>
+    </div>
+</div>
+
+</body>
+</html>

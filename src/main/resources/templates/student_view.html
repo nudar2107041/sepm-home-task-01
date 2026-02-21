@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Profile — Academia</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+  <a th:href="@{/}" class="brand">Academia</a>
+  <div class="nav-right">
+    <!-- GET /logout → SecurityConfig logout -->
+    <a th:href="@{/logout}" class="btn btn-danger" style="font-size:13px;padding:7px 16px">Logout</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- Profile header -->
+  <div class="profile-header" style="margin-top:8px">
+    <div class="avatar" th:text="${#strings.substring(student.fullName, 0, 1)}">J</div>
+    <div>
+      <div class="page-title" style="margin-bottom:2px" th:text="${student.fullName}">Name</div>
+      <p style="color:var(--muted);font-size:14px">
+        <span th:text="${student.username}"></span>
+        &nbsp;·&nbsp;
+        <span th:text="${student.department != null ? student.department.name : 'No department'}"></span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Info + courses grid -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:780px">
+
+    <div class="card">
+      <h2>My Details</h2>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Email</div>
+          <div th:text="${student.username}" style="font-weight:500"></div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Department</div>
+          <div th:text="${student.department != null ? student.department.name : '—'}" style="font-weight:500"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Enrolled Courses</h2>
+      <ul class="pill-list">
+        <li th:each="c : ${student.courses}" th:text="${c.name}" style="justify-content:flex-start"></li>
+        <li th:if="${#lists.isEmpty(student.courses)}"
+            style="color:var(--muted);font-size:13px;background:none;border:none;padding:0">No courses enrolled yet.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Enroll form -->
+  <!-- POST /student/enroll → StudentWebController#enroll (needs studentId + courseId params) -->
+  <div class="card" style="max-width:780px">
+    <h2>Enroll in a Course</h2>
+    <form th:action="@{/student/enroll}" method="post" style="display:flex;gap:12px;align-items:flex-end">
+      <input type="hidden" name="studentId" th:value="${student.id}"/>
+      <div style="flex:1">
+        <label>Available Courses</label>
+        <select name="courseId" required style="margin-bottom:0">
+          <option value="" disabled selected>Choose a course…</option>
+          <option th:each="c : ${allCourses}" th:value="${c.id}" th:text="${c.name}"></option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-gold" style="flex-shrink:0;padding:12px 22px;margin-bottom:1px">Enroll</button>
+    </form>
+  </div>
+
+</div>
+</body>
+</html>

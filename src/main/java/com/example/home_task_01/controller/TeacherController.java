@@ -2,12 +2,10 @@ package com.example.home_task_01.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.example.home_task_01.Teacher;
 import com.example.home_task_01.Student;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-interface TeacherRepository extends JpaRepository<Teacher, Long> {}
-interface StudentRepository extends JpaRepository<Student, Long> {}
+import com.example.home_task_01.Teacher;
+import com.example.home_task_01.repository.TeacherRepository;
+import com.example.home_task_01.repository.StudentRepository;
 
 @RestController
 @RequestMapping("/teacher")

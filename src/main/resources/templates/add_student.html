@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Student — Academia</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <style>
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:0 20px }
+    @media(max-width:520px){ .two-col { grid-template-columns:1fr } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a th:href="@{/}" class="brand">Academia</a>
+  <nav>
+    <a th:href="@{/view/students}">Students</a>
+    <a th:href="@{/view/courses}">Courses</a>
+    <a th:href="@{/view/departments}">Departments</a>
+  </nav>
+  <div class="nav-right">
+    <a th:href="@{/dashboard}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:14px">← Dashboard</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-title" style="margin-top:8px">Add Student</div>
+
+  <div class="card form" style="max-width:620px">
+    <!--
+      POST /teacher/student/create → TeacherWebController#createStudent
+      Params: fullName, username (email), password, departmentId
+    -->
+    <form th:action="@{/teacher/student/create}" method="post">
+
+      <label>Full Name</label>
+      <input type="text" name="fullName" placeholder="Jane Doe" required/>
+
+      <div class="two-col">
+        <div>
+          <!-- param name must be "username" — matches @RequestParam String username -->
+          <label>Email Address</label>
+          <input type="email" name="username" placeholder="jane@example.com" required/>
+        </div>
+        <div>
+          <label>Password</label>
+          <input type="password" name="password" placeholder="••••••••" required/>
+        </div>
+      </div>
+
+      <label>Department</label>
+      <!-- param name must be "departmentId" — matches @RequestParam Long departmentId -->
+      <select name="departmentId" required>
+        <option value="" disabled selected>Select a department…</option>
+        <option th:each="d : ${departments}" th:value="${d.id}" th:text="${d.name}"></option>
+      </select>
+
+      <button type="submit">Create Student</button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

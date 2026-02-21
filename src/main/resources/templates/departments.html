@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Departments — Academia</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+  <a th:href="@{/}" class="brand">Academia</a>
+  <nav>
+    <a th:href="@{/view/students}">Students</a>
+    <a th:href="@{/view/teachers}">Teachers</a>
+    <a th:href="@{/view/courses}">Courses</a>
+    <a th:href="@{/view/departments}">Departments</a>
+  </nav>
+  <div class="nav-right">
+    <a th:href="@{/dashboard}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:14px">Dashboard</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="action-bar">
+    <div class="page-title">Departments <span class="badge">Academic</span></div>
+    <!-- GET /teacher/department/add → TeacherWebController#addDepartmentForm -->
+    <a th:href="@{/teacher/department/add}" class="btn btn-gold">＋ Add Department</a>
+  </div>
+
+  <div class="card" style="padding:0;overflow:hidden">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Department Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="d : ${departments}">
+            <td><span class="chip" th:text="${d.id}"></span></td>
+            <td style="font-weight:600" th:text="${d.name}"></td>
+            <td>
+              <!-- POST /teacher/department/delete/{id} → TeacherWebController#deleteDepartment -->
+              <form th:action="@{'/teacher/department/delete/' + ${d.id}}" method="post" style="display:inline;margin:0">
+                <button type="submit" class="btn btn-danger" style="font-size:13px;padding:7px 14px;margin:0"
+                        onclick="return confirm('Delete this department?')">Delete</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Profile — Academia</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <style>
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:0 20px }
+    @media(max-width:540px){ .two-col { grid-template-columns:1fr } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a th:href="@{/}" class="brand">Academia</a>
+  <nav>
+    <a th:href="@{/view/students}">Students</a>
+    <a th:href="@{/view/teachers}">Teachers</a>
+    <a th:href="@{/view/courses}">Courses</a>
+    <a th:href="@{/view/departments}">Departments</a>
+  </nav>
+  <div class="nav-right">
+    <a th:href="@{/dashboard}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:14px">Dashboard</a>
+    <!-- GET /logout → SecurityConfig logout -->
+    <a th:href="@{/logout}" class="btn btn-danger" style="font-size:13px;padding:7px 14px">Logout</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- Profile header -->
+  <div class="profile-header" style="margin-top:8px">
+    <div class="avatar" th:text="${#strings.substring(teacher.fullName, 0, 1)}">T</div>
+    <div>
+      <div class="page-title" style="margin-bottom:2px" th:text="${teacher.fullName}">Teacher Name</div>
+      <p style="color:var(--muted);font-size:14px">
+        <span th:text="${teacher.username}"></span>
+        &nbsp;·&nbsp; Faculty
+      </p>
+    </div>
+  </div>
+
+  <!-- Edit form -->
+  <!-- POST /teacher/profile/update → TeacherWebController#updateTeacherProfile -->
+  <div class="card" style="max-width:680px">
+    <h2>Edit Profile</h2>
+    <form th:action="@{/teacher/profile/update}" method="post">
+      <input type="hidden" name="id" th:value="${teacher.id}"/>
+
+      <div class="two-col">
+        <div>
+          <label>Full Name</label>
+          <input type="text" name="fullName" th:value="${teacher.fullName}" required/>
+        </div>
+        <div>
+          <label>Email Address</label>
+          <input type="text" name="username" th:value="${teacher.username}" required/>
+        </div>
+      </div>
+
+      <label>Department</label>
+      <select name="departmentId">
+        <option th:each="d : ${departments}"
+                th:value="${d.id}"
+                th:text="${d.name}"
+                th:selected="${teacher.department != null and teacher.department.id == d.id}"></option>
+      </select>
+
+      <button type="submit">Save Profile</button>
+    </form>
+  </div>
+
+  <!-- Owned courses -->
+  <!-- teacher.courses works because we added getCourses() to Teacher.java -->
+  <div class="card" style="max-width:680px">
+    <h2>My Courses</h2>
+    <ul class="pill-list">
+      <li th:each="c : ${teacher.courses}">
+        <span th:text="${c.name}"></span>
+        <!-- POST /teacher/course/delete/{id} → TeacherWebController#deleteCourse -->
+        <form th:action="@{'/teacher/course/delete/' + ${c.id}}" method="post" style="display:inline;margin:0">
+          <button type="submit" class="btn btn-danger"
+                  style="font-size:12px;padding:4px 10px;border-radius:6px;margin:0"
+                  onclick="return confirm('Delete this course?')">Delete</button>
+        </form>
+      </li>
+      <li th:if="${#lists.isEmpty(teacher.courses)}"
+          style="color:var(--muted);font-size:13px;background:none;border:none;padding:0">No courses assigned yet.</li>
+    </ul>
+    <div style="margin-top:18px">
+      <!-- GET /teacher/course/add → TeacherWebController#addCourseForm -->
+      <a th:href="@{/teacher/course/add}" class="btn btn-gold">＋ Add New Course</a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

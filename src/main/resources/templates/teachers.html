@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Teachers — Academia</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <a th:href="@{/}" class="brand">Academia</a>
+    <nav>
+        <a th:href="@{/view/students}">Students</a>
+        <a th:href="@{/view/teachers}">Teachers</a>
+        <a th:href="@{/view/courses}">Courses</a>
+        <a th:href="@{/view/departments}">Departments</a>
+    </nav>
+    <div class="nav-right">
+        <a th:href="@{/dashboard}" style="color:rgba(255,255,255,.7);text-decoration:none;font-size:14px">Dashboard</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="action-bar">
+        <div class="page-title">Teachers <span class="badge">Faculty</span></div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="t : ${teachers}">
+                    <td><span class="chip" th:text="${t.id}"></span></td>
+                    <td style="font-weight:600" th:text="${t.fullName}"></td>
+                    <td style="color:var(--muted)" th:text="${t.username}"></td>
+                    <td th:text="${t.department != null ? t.department.name : '—'}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
